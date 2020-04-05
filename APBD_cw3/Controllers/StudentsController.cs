@@ -37,5 +37,21 @@ namespace APBD_cw3.Controllers
             return Ok(student);
         }
 
+        [HttpPut("{id}")]
+        public IActionResult UpdateStudent(int id, Student student)
+        {
+            //FIXME update data for a student with matching id
+            //student.IdStudent = id;
+            //return Ok(student);
+            return Ok("Aktualizacja dokończona");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteStudent(int id)
+        {
+            //FIXME delete a student with matching id
+            return Ok("Usuwanie ukończone");
+        }
+
     }
 }
