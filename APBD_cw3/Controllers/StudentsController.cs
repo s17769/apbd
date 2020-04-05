@@ -10,7 +10,7 @@ namespace APBD_cw3.Controllers
 {
     [ApiController]
     [Route("api/students")]
-    public class StudentsController : Controller
+    public class StudentsController : ControllerBase
     {
         // GET: /<controller>/
         public IActionResult Index()
