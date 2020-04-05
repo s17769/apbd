@@ -12,10 +12,10 @@ namespace APBD_cw3.Controllers
     [Route("api/students")]
     public class StudentsController : ControllerBase
     {
-        // GET: /<controller>/
-        public IActionResult Index()
+        [HttpGet]
+        public string GetStudent()
         {
-            return View();
+            return "Kowalski, Malewski, Andrzejewski";
         }
     }
 }
