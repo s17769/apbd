@@ -1,6 +1,6 @@
 using System;
 
-namespace APBD_cw3
+namespace apbd
 {
     public class WeatherForecast
     {

@@ -1,7 +1,7 @@
 
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APBD_cw3", "APBD_cw3\APBD_cw3.csproj", "{D60742DB-FA9A-45C5-83FA-9C54B5310074}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "apbd", "apbd\apbd.csproj", "{D60742DB-FA9A-45C5-83FA-9C54B5310074}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

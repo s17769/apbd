@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "APBD_cw3": {
+    "apbd": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "weatherforecast",

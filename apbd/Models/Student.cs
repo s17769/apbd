@@ -1,5 +1,5 @@
 ﻿using System;
-namespace APBD_cw3.Models
+namespace apbd.Models
 {
     public class Student
     {
