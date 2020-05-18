@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using apbd.Models;
 using apbd.Services;
@@ -53,14 +54,32 @@ namespace apbd.Controllers
 
 
         [HttpGet("{id}")]
-        public IActionResult GetStudent(int id)
+        public IActionResult GetStudent(String id)
         {
-            if (id == 1)
-                return Ok("Kowalski");
-            else if (id == 2)
-                return Ok("Malewski");
+            var list = new List<Student>();
 
-            return NotFound("Nie znaleziono studenta");
+            using (SqlConnection con = new SqlConnection(ConString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "SELECT * FROM Student WHERE IndexNumber = @ID";
+                com.Parameters.Add("@ID", SqlDbType.NVarChar);
+                com.Parameters["@ID"].Value = id;
+
+                con.Open();
+                SqlDataReader dr = com.ExecuteReader();
+                while (dr.Read())
+                {
+                    var st = new Student();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    list.Add(st);
+                }
+
+            }
+
+            return Ok(list);
         }
 
         [HttpPost]
