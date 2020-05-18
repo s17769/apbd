@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Data.SqlClient;
 using apbd.Models;
+using apbd.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -13,11 +13,44 @@ namespace apbd.Controllers
     [Route("api/students")]
     public class StudentsController : ControllerBase
     {
-        [HttpGet]
-        public string GetStudent(string orderBy)
+        // https://www.connectionstrings.com/sql-server/
+        private const string ConString = "Data Source=localhost;Initial Catalog=master;User ID=SA;Password=haslo123!@#";
+
+        private IStudentsDal _dbService;
+
+        public StudentsController(IStudentsDal dbService)
         {
-            return $"Kowalski, Malewski, Andrzejewski sortowanie={orderBy}";
+            _dbService = dbService;
         }
+
+        [HttpGet]
+        public IActionResult GetStudents([FromServices] IStudentsDal dbService)
+        {
+            var list = new List<Student>();
+
+            using (SqlConnection con = new SqlConnection(ConString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                com.Connection = con;
+                com.CommandText = "SELECT * FROM Student";
+
+                con.Open();
+                SqlDataReader dr = com.ExecuteReader();
+                while (dr.Read())
+                {
+                    var st = new Student();
+                    st.IndexNumber = dr["IndexNumber"].ToString();
+                    st.FirstName = dr["FirstName"].ToString();
+                    st.LastName = dr["LastName"].ToString();
+                    list.Add(st);
+                }
+
+            }
+
+            return Ok(list);
+        }
+
+
 
         [HttpGet("{id}")]
         public IActionResult GetStudent(int id)
