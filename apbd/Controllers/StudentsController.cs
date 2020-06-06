@@ -43,6 +43,8 @@ namespace apbd.Controllers
                     st.IndexNumber = dr["IndexNumber"].ToString();
                     st.FirstName = dr["FirstName"].ToString();
                     st.LastName = dr["LastName"].ToString();
+                    st.BirthDate = DateTime.Parse(dr["BirthDate"].ToString());
+                    st.IdEnrollment = Int32.Parse(dr["IdEnrollment"].ToString());
                     list.Add(st);
                 }
 
@@ -53,8 +55,8 @@ namespace apbd.Controllers
 
 
 
-        [HttpGet("{id}")]
-        public IActionResult GetStudent(String id)
+        [HttpGet("{indexNumber}")]
+        public IActionResult GetStudent(String indexNumber)
         {
             var list = new List<Student>();
 
@@ -62,9 +64,9 @@ namespace apbd.Controllers
             using (SqlCommand com = new SqlCommand())
             {
                 com.Connection = con;
-                com.CommandText = "SELECT * FROM Student WHERE IndexNumber = @ID";
-                com.Parameters.Add("@ID", SqlDbType.NVarChar);
-                com.Parameters["@ID"].Value = id;
+                com.CommandText = "SELECT * FROM Student WHERE IndexNumber = @IndexNumber";
+                com.Parameters.Add("@IndexNumber", SqlDbType.NVarChar);
+                com.Parameters["@IndexNumber"].Value = indexNumber;
 
                 con.Open();
                 SqlDataReader dr = com.ExecuteReader();
@@ -74,6 +76,8 @@ namespace apbd.Controllers
                     st.IndexNumber = dr["IndexNumber"].ToString();
                     st.FirstName = dr["FirstName"].ToString();
                     st.LastName = dr["LastName"].ToString();
+                    st.BirthDate = DateTime.Parse(dr["BirthDate"].ToString());
+                    st.IdEnrollment = Int32.Parse(dr["IdEnrollment"].ToString());
                     list.Add(st);
                 }
 
@@ -84,22 +88,47 @@ namespace apbd.Controllers
 
         [HttpPost]
         public IActionResult CreateStudent(Student student)
-        {
-            student.IndexNumber = $"s{new Random().Next(1, 20000)}";
+        {  
+            using (SqlConnection con = new SqlConnection(ConString))
+            using (SqlCommand com = new SqlCommand())
+            {
+                student.IndexNumber = $"s{new Random().Next(1, 20000)}";
+                com.Connection = con;
+                com.CommandText = "INSERT INTO Student VALUES " +
+                    "(@IndexNumber, @FirstName, @LastName, @BirthDate, @IdEnrollment)";
+                com.Parameters.Add("@IndexNumber", SqlDbType.NVarChar);
+                com.Parameters["@IndexNumber"].Value = student.IndexNumber;
+                com.Parameters.Add("@FirstName", SqlDbType.NVarChar);
+                com.Parameters["@FirstName"].Value = student.FirstName;
+                com.Parameters.Add("@LastName", SqlDbType.NVarChar);
+                com.Parameters["@LastName"].Value = student.LastName;
+                com.Parameters.Add("@BirthDate", SqlDbType.Date);
+                com.Parameters["@BirthDate"].Value = student.BirthDate;
+                com.Parameters.Add("@IdEnrollment", SqlDbType.Int);
+                com.Parameters["@IdEnrollment"].Value = student.IdEnrollment;
+
+                con.Open();
+                try
+                {
+                    int rowsAffected = com.ExecuteNonQuery();
+                } catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                    return BadRequest();
+                }
+            }
+
             return Ok(student);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateStudent(int id, Student student)
+        [HttpPut("{indexNumber}")]
+        public IActionResult UpdateStudent(String indexNumber, Student student)
         {
-            //FIXME update data for a student with matching id
-            //student.IdStudent = id;
-            //return Ok(student);
-            return Ok("Aktualizacja dokończona");
+            return Ok("Aktualizacja zakończona");
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteStudent(int id)
+            public IActionResult DeleteStudent(int id)
         {
             //FIXME delete a student with matching id
             return Ok("Usuwanie ukończone");
